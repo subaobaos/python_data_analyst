@@ -31,6 +31,7 @@ from src.config import config
 from src.utils import aes
 import pymysql
 import pandas as pd
+from sqlalchemy import create_engine
 import re
 
 DB = config.mysql_aliyun
@@ -97,6 +98,22 @@ class Mysqlhelper():
             print('get_df失败')
 
         return df
+
+    def creat_table(self, df, table):
+
+        a = 'mysql+pymysql://' + self.user+':' + self.pwd + '@' + self.host + ':' + str(self.port) + '/' + self.db
+
+        try:
+            engine = create_engine(
+                a,
+                encoding='utf8')
+
+            df.to_sql(table, engine, if_exists='replace', index=False)
+
+            print('创建表'+str(table)+'成功！')
+        except BaseException:
+
+            print('创建表'+str(table)+'失败！')
 
     def sql_clean(self, sql):
 

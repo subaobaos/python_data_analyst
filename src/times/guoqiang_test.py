@@ -29,12 +29,10 @@
 
 from src.config import config
 from src.utils import mysqlhelper
-
+import pandas as pd
 
 mysqlhelper_instance = mysqlhelper.Mysqlhelper(**config.mysql_aliyun)
 
-sql = '''select * from gq_xm_table'''
+df1 = pd.read_excel(r'/Users/wangguoqiang/Desktop/线上作业.xlsx')
 
-df = mysqlhelper_instance.get_df(sql)
-
-print(df)
+mysqlhelper_instance.creat_table(df1, 'wd_homework')
