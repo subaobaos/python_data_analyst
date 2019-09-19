@@ -101,7 +101,8 @@ class Mysqlhelper():
 
     def creat_table(self, df, table):
 
-        a = 'mysql+pymysql://' + self.user+':' + self.pwd + '@' + self.host + ':' + str(self.port) + '/' + self.db
+        a = 'mysql+pymysql://' + self.user + ':' + self.pwd + \
+            '@' + self.host + ':' + str(self.port) + '/' + self.db
 
         try:
             engine = create_engine(
@@ -110,10 +111,30 @@ class Mysqlhelper():
 
             df.to_sql(table, engine, if_exists='replace', index=False)
 
-            print('创建表'+str(table)+'成功！')
+            print('创建表' + str(table) + '成功！')
         except BaseException:
 
-            print('创建表'+str(table)+'失败！')
+            print('创建表' + str(table) + '失败！')
+
+    def insert_data(self, sql):
+
+        sql = self.sql_clean(sql)
+
+        self.conn = self.get_conn()
+
+        # 使用cursor()方法获取操作游标
+        cursor = self.conn.cursor()
+
+        try:
+            cursor.execute(sql)
+            self.conn.commit()
+            print('数据插入成功！')
+        except BaseException:
+            # 发生错误时回滚
+            self.conn.rollback()
+            print('数据插入失败！')
+        # 关闭数据库连接
+        self.close(self.conn, cursor)
 
     def sql_clean(self, sql):
 
