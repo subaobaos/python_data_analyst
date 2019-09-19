@@ -3,7 +3,7 @@
 # @Time    : 2019-09-19 13:22
 # @Author  : 小苏
 # @Email   : 737029580@qq.com
-# @File    : dingdingd_robot.py
+# @File    : dingding_robot.py
 # @Software: PyCharm
 
 #                                                    __----~~~~~~~~~~~------___
