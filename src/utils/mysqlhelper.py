@@ -29,10 +29,15 @@
 
 from src.config import config
 from src.utils import aes
+from src.utils.mydbpools import getDBonnectionPools
 import pymysql
 import pandas as pd
 from sqlalchemy import create_engine
 import re
+from queue import Queue
+from math import ceil
+import threading
+import time
 
 DB = config.mysql_aliyun
 host = DB["host"]
@@ -112,9 +117,9 @@ class Mysqlhelper():
             df.to_sql(table, engine, if_exists='replace', index=False)
 
             print('创建表' + str(table) + '成功！')
-        except BaseException:
+        except BaseException as e:
 
-            print('创建表' + str(table) + '失败！')
+            print('创建表' + str(table) + '失败！' + str(e))
 
     def insert_data(self, sql):
 
@@ -152,3 +157,78 @@ class Mysqlhelper():
 
         except BaseException:
             pass
+
+    def insertmany_bydf(self, df, tb, if_exists="append", n=6):
+        """数据插入数据库的封装方法用于`处理空值&打印过程信息&打印插入信息`"""
+
+        startTime = time.time()
+
+        #filename = sys.argv[0][sys.argv[0].rfind(os.sep) + 1:].split(".py")[0].split("/")[-1]
+
+        df = df.where(pd.notnull(df), "None").replace("nan", "None").replace("NaN", "None")
+        df = df.astype("str")
+        sql = """insert into {0} ({1}) values ({2});"""
+        sql = sql.format(tb, ",".join(df.columns), ("%s," * len(df.columns))[:-1])
+        count_times = 0
+
+        while count_times < n:
+            try:
+
+                conn = self.get_conn()
+                cursor = conn.cursor()
+
+                if if_exists == "replace":
+                    delete_rows = cursor.execute("delete from {0}".format(tb))
+                elif if_exists == "replace-truncate":
+                    delete_rows = cursor.execute("truncate {0}".format(tb))
+                else:
+                    delete_rows = 0
+                para = [tuple([None if y == "None" else y for y in x]) for x in df.values]
+                insert_rows = cursor.executemany(sql, para)
+                conn.commit()
+
+                print("   insert数据行数:{0}".format(insert_rows))
+                print("数据库insert成功")
+
+                endTime = time.time()
+                time_eclipse = round((endTime - startTime), 2)
+
+
+                count_times = n
+
+            except Exception as e:
+
+                count_times += 1
+                conn.rollback()
+                conn.commit()
+                self.close(conn, cursor)
+
+                print('失败')
+
+
+
+    def insertmany_bydf_thread(self, big_df, tb, if_exists="append"):
+
+
+        self.dbinstance = getDBonnectionPools()
+
+        if if_exists == "replace":
+            self.execute(sql="truncate {0}".format(tb))
+
+        q = Queue(maxsize=15)  # 设定最大队列数和线程数
+
+        nrows = big_df.shape[0]
+        cut = 50000
+        nceil = ceil(nrows / 50000)
+
+        for i in range(nceil):
+            t = threading.Thread(target=self.insertmany_bydf, args=(big_df[cut * i: cut * (i + 1)], tb, "append"))
+            q.put(t)
+            if (q.full() == True) or i == nceil - 1:
+                thread_list = []
+                while q.empty() == False:
+                    t = q.get()
+                    thread_list.append(t)
+                    t.start()
+                for t in thread_list:
+                    t.join()
