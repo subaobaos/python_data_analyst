@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-# @Time    : 2019-12-01 14:45
+# @Time    : 2019-12-01 10:39
 # @Author  : 小苏
 # @Email   : 737029580@qq.com
 # @File    : QT_test_01.py
@@ -28,13 +28,21 @@
 #                  永无BUG!
 
 import sys
-import QT_01
-from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5 import QtWidgets
+from QT_01 import Ui_Dialog
+
+class MyPyQT_Form(QtWidgets.QWidget,Ui_Dialog):
+    def __init__(self):
+        super(MyPyQT_Form,self).__init__()
+        self.setupUi(self)
+
+    # 点击按钮事件
+    def pushButton_click(self):
+        print('你点击了按钮')
+
 
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    MainWindow = QMainWindow()
-    ui = QT_01.Ui_Dialog()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
+    app = QtWidgets.QApplication(sys.argv)
+    my_pyqt_form = MyPyQT_Form()
+    my_pyqt_form.show()
     sys.exit(app.exec_())
