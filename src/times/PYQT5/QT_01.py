@@ -32,6 +32,7 @@ class Ui_Dialog(object):
         self.lineEdit_2.setObjectName("lineEdit_2")
 
         self.retranslateUi(Dialog)
+        self.pushButton_2.clicked.connect(Dialog.pushButton_click)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
