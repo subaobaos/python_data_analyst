@@ -188,6 +188,9 @@ while(j > 0):
             else:
                 i += 1
                 time.sleep(5)
+        if (dxnr == 0):
+            print('暂无验证码 跳过')
+            continue
 
         # 提交修改密码
 
