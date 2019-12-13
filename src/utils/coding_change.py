@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-# @Time    : 2019-12-06 11:40
+# @Time    : 2019-12-11 16:27
 # @Author  : 小苏
 # @Email   : 737029580@qq.com
-# @File    : img_check.py
+# @File    : coding_change.py
 # @Software: PyCharm
 
 #                                                    __----~~~~~~~~~~~------___
@@ -26,24 +26,3 @@
 #                                      //.-~~~--\
 #               神兽保佑
 #                  永无BUG!
-
-#### 图片清晰度检测
-
-import os
-import cv2
-import glob
-
-imglist = glob.glob(r'D:\byte_data\1212_card\Camera\*.jpg')
-
-def getImageVar(imgPath):
-	image = cv2.imread(imgPath);
-	img2gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-	imageVar = cv2.Laplacian(img2gray, cv2.CV_64F).var()
-
-	return imageVar
-
-for i in imglist:
-	s = getImageVar(i)
-	if s < 80:
-		print(str(s) + str(i))
-		os.remove(i)

@@ -75,7 +75,7 @@ for line in xiongmao:
         ############ 将数据更新到熊猫表 #################
 
         sql = """update gq_xm_table set xm_jr_time = '%s',xm_yzm = '%s' where xm_zh = '%s'""" % (
-            a.expire_time,'10-24 check', xm_hao)
+            a.expire_time,'12-09 check', xm_hao)
         cur.execute(sql)
         db.commit()
         time.sleep(5)
