@@ -27,17 +27,69 @@
 #               神兽保佑
 #                  永无BUG!
 
+"""
+timedelta # 主要用于计算时间跨度
+tzinfo # 时区相关
+time # 只关注时间
+date # 只关注日期
+datetime # 同时有时间和日期
+"""
+
 import time
-import datetime
+from datetime import date,datetime,timedelta
 
+####################################  date类  ####################################
 
-class TimeHelper():
+#### 获取当前日期(年-月-日_date)
+def DateToday():
+    return date.today()
 
-    def __init__(self):
-        pass
+#### 获取指定格式日期(年-月-日_str)
+def DateTodayStrftime():
+    return date.today().strftime("%Y-%m-%d")
+
+#### 获取当前日期年份(年_int)
+def DateTodayYear():
+    return date.today().year
+
+#### 获取当前日期年份(月_int)
+def DateTodayMonth():
+    return date.today().month
+
+#### 获取当前日期年份(日_int)
+def DateTodayDay():
+    return date.today().day
+
+#### 返回date对象的struct_time结构
+def DateTodayTimetuple():
+    return date.today().timetuple()
+
+#### 返回一星期中的第几天,星期一是0
+def DateTodayWeekday():
+    return date.today().weekday()
+
+####################################  datetime类  ####################################
+
+#### 获取当前时间(年-月-日 时-分-秒-微秒_datetime)
+def DatetimeToday():
+    return datetime.today()
+
+#### 获取指定格式时间(年-月-日 时-分-秒_str)
+def DateTodayStrftime():
+    return datetime.today().strftime("%Y-%m-%d %H:%M:%S")
+
+####################################  timedelta类  ####################################
+'''timedelta对象表示一个时间段，即两个日期 (date) 或日期时间 (datetime) 之间的差'''
+
+#### 获取前1天的日期时间
+def TimedeltaTest1():
+    return datetime.today() - timedelta(days=1)
+
+#### 获取前1天1小时1分钟的日期时间
+def TimedeltaTest2():
+    return datetime.today() - timedelta(days=1,hours=1,minutes=1)
 
 if __name__ == '__main__':
 
-    st = time.gmtime()
-    st = time.localtime()
-    print(st)
+    print("现在时间为：" + DateTodayStrftime())
+
