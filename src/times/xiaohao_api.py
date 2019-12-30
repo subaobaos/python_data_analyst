@@ -48,29 +48,50 @@ class xhpt():
         self.b = datetime.datetime.strptime(
             datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "%Y-%m-%d %H:%M:%S")
-        self.ck = ''
+        self.s = requests.session()
         self.rece_body = ''
         self.t = ''
 
     def get_login(self):
         self.t = time.strftime('%Y-%m-%d', time.localtime(time.time()))
-        url = 'http://47.110.86.5:9999/index.php?g=cust&m=login&a=dologin'
+        url = 'http://103.99.210.71:1111'
+
+        rece = self.s.get(url)
+        rece = rece.text
+
+        re1 = r"name='_tn' value='([\s\S]*?)'/> <input name"
+        reg1 = re.compile(re1)
+        rece1 = reg1.findall(rece)
+        tn = rece1[0]
+        print(tn)
+
+        url = 'http://103.99.210.71:1111/index.php?g=cust&m=login&a=dologin'
         data = {
+            '_tn': tn,
             'username': self.xh_user,
             'password': self.xh_password
         }
         headers = {
-            'Host': '47.110.86.5:9999',
-            'Origin': 'http://47.110.86.5:9999',
-            'Referer': 'http://47.110.86.5:9999/index.php?g=cust&m=login&a=index',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
+            "Host": "103.99.210.71:1111",
+            "Connection": "keep-alive",
+            "Content-Length": "86",
+            "Pragma": "no-cache",
+            "Cache-Control": "no-cache",
+            "Accept": "*/*",
+            "Origin": "http://103.99.210.71:1111",
+            "X-Requested-With": "XMLHttpRequest",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36",
+            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+            "Referer": "http://103.99.210.71:1111/",
+            "Accept-Encoding": "gzip, deflate",
+            "Accept-Language": "zh-CN,zh;q=0.9",
         }
 
-        rece = requests.post(url, data=data, headers=headers)
-        self.ck = rece.cookies.get_dict()
+        res = self.s.post(url, data=data, headers=headers)
+        return res
 
     def get_yzmbody(self):
-        url = 'http://47.110.86.5:9999/index.php?g=cust&m=smscust&a=receive'
+        url = 'http://103.99.210.71:1111/index.php?g=cust&m=smscust&a=receive'
 
         data = {
             'msgid': '',
@@ -81,13 +102,18 @@ class xhpt():
         }
 
         headers = {
-            'Host': '47.110.86.5:9999',
-            'Origin': 'http://47.110.86.5:9999',
-            'Referer': 'http://47.110.86.5:9999/index.php?g=cust&m=login&a=index',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
+            "Host": "103.99.210.71:1111",
+            "Connection": "keep-alive",
+            "Pragma": "no-cache",
+            "Cache-Control": "no-cache",
+            "Upgrade-Insecure-Requests": "1",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+            "Accept-Encoding": "gzip, deflate",
+            "Accept-Language": "zh-CN,zh;q=0.9",
         }
 
-        rece = requests.post(url, data=data, headers=headers, cookies=self.ck)
+        rece = self.s.post(url, data=data, headers=headers)
         self.rece_body = rece.text
 
     def get_yzm(self):
@@ -142,6 +168,25 @@ class xhpt():
         except BaseException:
             return 0
 
+    def get_notice(self):
+
+        url = 'http://103.99.210.71:1111/index.php?g=cust&m=center&a=cust_home'
+
+        headers = {
+            "Host": "103.99.210.71:1111",
+            "Connection": "keep-alive",
+            "Pragma": "no-cache",
+            "Cache-Control": "no-cache",
+            "Upgrade-Insecure-Requests": "1",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+            "Accept-Encoding": "gzip, deflate",
+            "Accept-Language": "zh-CN,zh;q=0.9",
+        }
+
+        res = self.s.get(url,headers=headers)
+
+        print(res.text)
 
 
 url = 'https://subaobao.club/xhpt/tokenyz.php'
