@@ -317,6 +317,10 @@ while(j > 0):
                 i += 1
                 time.sleep(5)
 
+        if (dxnr == 0):
+            print('暂时无法收取验证码 已跳过')
+            continue
+
         ls.ls_push_yzm(dxnr=dxnr)
 
         print(ls.__dict__)
