@@ -54,7 +54,7 @@ class xhpt():
 
     def get_login(self):
         self.t = time.strftime('%Y-%m-%d', time.localtime(time.time()))
-        url = 'http://103.99.210.71:1111'
+        url = 'http://121.40.17.58:9999'
 
         rece = self.s.get(url)
         rece = rece.text
@@ -65,24 +65,24 @@ class xhpt():
         tn = rece1[0]
         print(tn)
 
-        url = 'http://103.99.210.71:1111/index.php?g=cust&m=login&a=dologin'
+        url = 'http://121.40.17.58:9999/index.php?g=cust&m=login&a=dologin'
         data = {
             '_tn': tn,
             'username': self.xh_user,
             'password': self.xh_password
         }
         headers = {
-            "Host": "103.99.210.71:1111",
+            "Host": "121.40.17.58:9999",
             "Connection": "keep-alive",
             "Content-Length": "86",
             "Pragma": "no-cache",
             "Cache-Control": "no-cache",
             "Accept": "*/*",
-            "Origin": "http://103.99.210.71:1111",
+            "Origin": "http://121.40.17.58:9999",
             "X-Requested-With": "XMLHttpRequest",
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36",
             "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-            "Referer": "http://103.99.210.71:1111/",
+            "Referer": "http://121.40.17.58:9999/",
             "Accept-Encoding": "gzip, deflate",
             "Accept-Language": "zh-CN,zh;q=0.9",
         }
@@ -91,7 +91,7 @@ class xhpt():
         return res
 
     def get_yzmbody(self):
-        url = 'http://103.99.210.71:1111/index.php?g=cust&m=smscust&a=receive'
+        url = 'http://121.40.17.58:9999/index.php?g=cust&m=smscust&a=receive'
 
         data = {
             'msgid': '',
@@ -102,7 +102,7 @@ class xhpt():
         }
 
         headers = {
-            "Host": "103.99.210.71:1111",
+            "Host": "121.40.17.58:9999",
             "Connection": "keep-alive",
             "Pragma": "no-cache",
             "Cache-Control": "no-cache",
@@ -170,10 +170,10 @@ class xhpt():
 
     def get_notice(self):
 
-        url = 'http://103.99.210.71:1111/index.php?g=cust&m=center&a=cust_home'
+        url = 'http://121.40.17.58:9999/index.php?g=cust&m=center&a=cust_home'
 
         headers = {
-            "Host": "103.99.210.71:1111",
+            "Host": "121.40.17.58:9999",
             "Connection": "keep-alive",
             "Pragma": "no-cache",
             "Cache-Control": "no-cache",
