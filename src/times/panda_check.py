@@ -72,10 +72,12 @@ for line in xiongmao:
 
     if a.pd_pc_login() == 1:
 
+        isonline = a.pd_check()
+
         ############ 将数据更新到熊猫表 #################
 
         sql = """update gq_xm_table set xm_jr_time = '%s',xm_yzm = '%s' where xm_zh = '%s'""" % (
-            a.expire_time,'12-09 check', xm_hao)
+            a.expire_time,isonline, xm_hao)
         cur.execute(sql)
         db.commit()
         time.sleep(5)

@@ -29,6 +29,7 @@
 
 import requests
 import re
+import datetime
 
 class panda():
 
@@ -37,6 +38,8 @@ class panda():
         self.s = requests.session()
         self.user_name = user
         self.passwd = pwd
+        self.pd_encode_user = ''
+        self.pd_encode_pwd = ''
         self.expire_time = ''
         self.phone = ''
         self.pd_online = ''
@@ -156,20 +159,17 @@ class panda():
 
     def pd_pc_login(self):
 
-        pd_encode_user = ''
-        pd_encode_pwd = ''
-
         for i in self.user_name:
-            pd_encode_user += self.pd_encode(i)
+            self.pd_encode_user += self.pd_encode(i)
 
         for i in self.passwd:
-            pd_encode_pwd += self.pd_encode(i)
+            self.pd_encode_pwd += self.pd_encode(i)
 
         url = 'http://39.108.73.100/v1/user/login'
 
         data = {
-            'username': pd_encode_user,
-            'password': pd_encode_pwd,
+            'username': self.pd_encode_user,
+            'password': self.pd_encode_pwd,
             'mask': '2C2D787E7E292E2C29797B2A77792C7D7E767779787E7A777F7D792B772A7E2C',
             'appversion': '7B617E617E617F',
             'openid': '',
@@ -195,5 +195,35 @@ class panda():
         else:
             print(self.user_name + ' pc登录失败')
             return 0
+
+
+    def pd_check(self):
+
+        url = 'http://39.108.73.100/v1/user/deprecate'
+
+        data = {
+            'username': self.pd_encode_user,
+            'password': self.pd_encode_pwd,
+            'client_version': '7B617F617A617F',
+            'client_ip': '7D7D7C617E7979617C7D617C',
+            'platform': '7B',
+            'mask': '7B2A7A2E792D772E7A2978787D2D797A7E2B2B2B2E2A7C292D2E7E767A2D7B2A',
+            'channel': '3C3B2E212B2E3D2B',
+            'client_id': 'ac12247a07ef0001fcb7'}
+
+        rece = requests.post(url, data=data)
+
+        rece = rece.json()
+
+        nowTime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # 现在
+
+        # {'code': 1, 'msg': 'no connection', 'data': {'online': 0, 'expire': 0}}
+
+        if (rece['code'] == 1):
+            is_online = nowTime + '暂时无人加速'
+        else:
+            is_online = nowTime + '正在加速中'
+
+        return is_online
 
 
