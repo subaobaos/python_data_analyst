@@ -27,7 +27,7 @@
 #               神兽保佑
 #                  永无BUG!
 
-from config import config
+from src.config import config
 import requests
 import json
 
