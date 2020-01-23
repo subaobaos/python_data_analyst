@@ -42,7 +42,7 @@ class XunProxy():
         url = "http://api.xdaili.cn/xdaili-api//greatRecharge/getGreatIp?spiderId=" + self.spiderId + "&orderno=" + self.order_number + "&returnType=2&count=1"
         rece = requests.get(url)
         rece = rece.json()
-        print(res)
+        print(rece)
         port = rece['RESULT'][0]['port']
         ip = rece['RESULT'][0]['ip']
         return ip, port
