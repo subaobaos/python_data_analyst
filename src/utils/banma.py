@@ -58,7 +58,7 @@ class Banma():
 
         if status == '1':
             print('status:' + str(status) + ' token:' + str(self.token))
-            return '成功'
+            return self.token
 
         else:
             print('res:' + res)
@@ -92,7 +92,7 @@ class Banma():
 
         if status == '1':
             print('status:' + str(status) + ' 手机号:' + str(self.phone))
-            return '成功'
+            return self.phone
 
         else:
             print('res:' + res)
@@ -116,7 +116,7 @@ class Banma():
 
         if status == '1':
             print('status:' + str(status) + ' 验证码:' + str(self.message))
-            return '成功'
+            return self.message
 
         else:
             print('res:' + res)
