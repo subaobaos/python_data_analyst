@@ -38,40 +38,60 @@ class Key():
         self.mysqlhelper_instance = mysqlhelper.Mysqlhelper()
 
 
-    def create_panda_key(self,number,leixin,resume,tablename='gq_xm_jhm'):
+    def create_key(self,number,leixin,resume,tablename='gq_xm_jhm'):
 
-        if tablename != 'gq_xm_jhm':
+        print(tablename)
+
+        if tablename == 'gq_xm_jhm':
+
+            key_leixin = int(leixin)
+            key_resume = str(resume)
+            keylist = ''
+
+            while(number > 0):
+
+                key = str(random.randint(0,99999999)).zfill(13)
+                keylist = keylist + key + '\n'
+
+                sql = "INSERT INTO gq_xm_jhm(jihuoma, \
+                       `type`, leixin, resume, jr_time) \
+                       VALUES ('%s', '1', '%s',  '%s', now())" % \
+                      (key, key_leixin, key_resume)
+
+                self.mysqlhelper_instance.insert_data(sql)
+
+                number -= 1
+            print(keylist)
+
+        elif tablename == 'gq_htkey_table':
+
+            key_leixin = int(leixin)
+            key_resume = str(resume)
+            keylist = ''
+
+            while (number > 0):
+                key = str(random.randint(0, 99999999)).zfill(13)
+                keylist = keylist + key + '\n'
+
+                sql = "INSERT INTO gq_htkey_table(key_number, \
+                       key_status, key_type, key_resume, key_maketime) \
+                       VALUES ('%s', '1', '%s',  '%s', now())" % \
+                      (key, key_leixin, key_resume)
+
+                self.mysqlhelper_instance.insert_data(sql)
+
+                number -= 1
+            print(keylist)
+
+        else:
 
             pass
-
-        key_leixin = int(leixin)
-        key_resume = str(resume)
-        keylist = ''
-
-        while(number > 0):
-
-            key = str(random.randint(0,99999999)).zfill(13)
-            keylist = keylist + key + '\n'
-
-            sql = "INSERT INTO gq_xm_jhm(jihuoma, \
-                   `type`, leixin, resume, jr_time) \
-                   VALUES ('%s', '1', '%s',  '%s', now())" % \
-                  (key, key_leixin, key_resume)
-
-            self.mysqlhelper_instance.insert_data(sql)
-
-            number -= 1
-
-        print(keylist)
 
 
 if __name__ == '__main__':
 
     new_key = Key()
 
-    new_key.create_panda_key(100,1,'公众号')
-
-
-
+    new_key.create_key(1,'1','test',tablename='gq_htkey_table')
 
 

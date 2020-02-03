@@ -30,6 +30,9 @@
 import time
 import requests
 import hashlib
+from src.config import config
+
+data = config.aqs_api
 
 def get_sign(arge,AppSecret):
 
@@ -54,9 +57,9 @@ def get_md5(x):
     x = m.hexdigest()
     return x
 t = int(time.time())
-AppId = '**************************'
-AppSecret = '**************************'
-token = '**************************'
+AppId = data['AppId']
+AppSecret = data['AppSecret']
+token = data['token']
 
 headers = {}
 headers['Authorization'] = 'Bearer ' + token
@@ -65,12 +68,12 @@ headers['ApiVersion'] = '1'
 # api业务参数
 params = []
 params.append('timestamp' + str(t))
-params.append('tid' + '603132899334469444')
+params.append('tid' + '835103587684501751')
 
 data = {}
 data['sign'] = get_sign(params,AppSecret)
 data['timestamp'] = t
-data['tid'] = 603132899334469444
+data['tid'] = 835103587684501751
 print(data)
 
 url = 'http://gw.api.agiso.com/alds/Trade/TradeInfo'
