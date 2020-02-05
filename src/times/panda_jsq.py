@@ -26,7 +26,7 @@
 #                                      //.-~~~--\
 #               神兽保佑
 #                  永无BUG!
-
+import time
 import requests
 import re
 import datetime
@@ -220,10 +220,54 @@ class panda():
         # {'code': 1, 'msg': 'no connection', 'data': {'online': 0, 'expire': 0}}
 
         if (rece['code'] == 1):
+            time.sleep(2)
             is_online = nowTime + '暂时无人加速'
+            # url = 'http://api.xiongmao555.com/v1/game/free-list'
+            # data = {
+            #     'token': self.token,
+            #     'client_version': '7B617F617A617F',
+            #     'client_ip': '7D7D7C617E7979617C7D617C',
+            #     'platform': '7B',
+            #     'mask': '7B2A7A2E792D772E7A2978787D2D797A7E2B2B2B2E2A7C292D2E7E767A2D7B2A',
+            #     'channel': '3C3B2E212B2E3D2B',
+            # }
+
+            url = 'http://39.108.73.100/v1/report/submit-fault'
+            data = {
+                'username': self.pd_encode_user,
+                'password': self.pd_encode_pwd,
+                'client_id': 'ac12247a07ef0001fcb7',
+                'token': self.token,
+                'client_version': '7B617F617A617F',
+                'client_ip': '7D7D7C617E7979617C7D617C',
+                'platform': '7B',
+                'mask': '7B2A7A2E792D772E7A2978787D2D797A7E2B2B2B2E2A7C292D2E7E767A2D7B2A',
+                'channel': '3C3B2E212B2E3D2B',
+                'connect_length': '36531',
+                'connect_id': '8258',
+                'proxy_mode': '\u6a21\u5f0f\u4e00',
+                'game_id': '8104',
+                'provider': '352',
+                'state': '1',
+                'connect_ip': '223.167.32.194',
+            }
+
+            rece = requests.post(url, data=data)
+
+            rece = rece.json()
+            # print(rece)
+
         else:
             is_online = nowTime + '正在加速中'
 
         return is_online
 
 
+if __name__ == '__main__':
+
+    a = panda('15665426103@qq.com','jsb122085')
+
+    a.pd_pc_login()
+
+    rece2 = a.pd_check()
+    print(rece2)
