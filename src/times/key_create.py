@@ -36,9 +36,10 @@ class Key():
     def __init__(self):
         aes_instance = aes.Aestion()
         self.mysqlhelper_instance = mysqlhelper.Mysqlhelper()
+        self.km_mysql = mysqlhelper.Mysqlhelper(db='km')
 
 
-    def create_key(self,number,leixin,resume,tablename='gq_xm_jhm'):
+    def create_key(self,number,leixin,resume,tablename='gq_xm_jhm',is_gzh=False):
 
         print(tablename)
 
@@ -47,11 +48,18 @@ class Key():
             key_leixin = int(leixin)
             key_resume = str(resume)
             keylist = ''
+            key_list = ''
 
             while(number > 0):
 
                 key = str(random.randint(0,99999999)).zfill(13)
-                keylist = keylist + key + '\n'
+                key_list = key_list + key + '\n'
+                geshi  = 'a:1:{s:3:"key";s:13:"' + key + '";}'
+
+                if number - 1 <= 0:
+                    keylist = keylist + "'" + key
+                else:
+                    keylist = keylist + "'" + key + "',"
 
                 sql = "INSERT INTO gq_xm_jhm(jihuoma, \
                        `type`, leixin, resume, jr_time) \
@@ -59,19 +67,28 @@ class Key():
                       (key, key_leixin, key_resume)
 
                 self.mysqlhelper_instance.insert_data(sql)
+                if is_gzh == True:
+                    sql2 = "insert into ims_ewei_shop_virtual_data (uniacid,typeid,pvalue,fields,createtime) value ('3','5','%s','%s','1581136292')" % (key,geshi)
+
+                    self.km_mysql.insert_data(sql2)
 
                 number -= 1
-            print(keylist)
 
         elif tablename == 'gq_htkey_table':
 
             key_leixin = int(leixin)
             key_resume = str(resume)
             keylist = ''
+            key_list= ''
 
             while (number > 0):
                 key = str(random.randint(0, 99999999)).zfill(13)
-                keylist = keylist + key + '\n'
+                key_list = key_list + key + '\n'
+
+                if number - 1 <= 0:
+                    keylist = keylist + "'" + key
+                else:
+                    keylist = keylist + "'" + key + "',"
 
                 sql = "INSERT INTO gq_htkey_table(key_number, \
                        key_status, key_type, key_resume, key_maketime) \
@@ -81,17 +98,18 @@ class Key():
                 self.mysqlhelper_instance.insert_data(sql)
 
                 number -= 1
-            print(keylist)
-
         else:
 
             pass
+
+        print(key_list)
+        return keylist
 
 
 if __name__ == '__main__':
 
     new_key = Key()
 
-    new_key.create_key(1,'1','test',tablename='gq_htkey_table')
+    new_key.create_key(100,'2','公众号',is_gzh=True)
 
 
