@@ -48,6 +48,11 @@ db = DB["db"]
 
 encryption_instance = aes.Aestion()
 
+host = encryption_instance.decode_data(host)
+port = int(encryption_instance.decode_data(port))
+user = encryption_instance.decode_data(user)
+pwd = encryption_instance.decode_data(pwd)
+db = encryption_instance.decode_data(db)
 
 class Mysqlhelper():
 
@@ -60,11 +65,11 @@ class Mysqlhelper():
             db=db,
             charset='utf8',):
 
-        self.host = encryption_instance.decode_data(host)
-        self.port = int(encryption_instance.decode_data(port))
-        self.user = encryption_instance.decode_data(user)
-        self.pwd = encryption_instance.decode_data(pwd)
-        self.db = encryption_instance.decode_data(db)
+        self.host = host
+        self.port = port
+        self.user = user
+        self.pwd = pwd
+        self.db = db
         self.charset = charset
 
     def get_conn(self):
