@@ -147,7 +147,7 @@ class Banma():
 
 if __name__ == '__main__':
 
-    banma = Banma(config.apiuser,config.apipwd)
+    banma = Banma(config.apiuser,config.apipwd,'1253')
 
     banma.loginIn()
 
