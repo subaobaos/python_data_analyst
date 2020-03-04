@@ -46,7 +46,7 @@ class Catapi():
     def get_code(self,phone):
 
         sql1 = '''
-        SELECT smsContent FROM sms_recv WHERE PhoNum = {0} and smsDate between date_add(now(), interval - 5 minute) and now()
+        SELECT smsContent FROM sms_recv WHERE PhoNum = {0} and smsDate between  now() and date_add(now(), interval + 5 minute)
         '''.format(phone)
         self.cur.execute(sql1)
         code = self.cur.fetchall()
