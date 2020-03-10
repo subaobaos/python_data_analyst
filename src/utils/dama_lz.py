@@ -33,7 +33,7 @@ title = '联众打码平台'
 
 class liangZhong():
 
-    def __init__(self,user,pwd):
+    def __init__(self,user=config.lz_user,pwd=config.lz_pwd):
 
         self.user = user
         self.pwd = pwd
